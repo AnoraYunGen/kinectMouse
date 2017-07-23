@@ -76,6 +76,10 @@ namespace KinectV2MouseControl
         /// </summary>
         */
         public float cursorSmoothing = CURSOR_SMOOTHING;
+        /*
+         * this is for getting the debug window to manipulate the variables in the window **hopefully
+         * */
+        DebugWindow debug = new DebugWindow();
         /* following 6 values are used to get the values from the 
          * kinect
          * */
@@ -233,19 +237,18 @@ namespace KinectV2MouseControl
                         this.left_y = spineBase.Y - handLeft.Y + 0.51f;
                         this.left_z = spineBase.Z - handLeft.Z;
                         //CMD_out();
-                        /*
-                        //update values in gui
-                        mainWin.rx_val.Text = this.right_x.ToString("f2");
-                        mainWin.ry_val.Text = this.right_y.ToString("f2");
-                        mainWin.rz_val.Text = this.right_z.ToString("f2");
                         
-                        mainWin.lx_val.Text = this.left_x.ToString("f2");
-                        mainWin.ly_val.Text = this.left_y.ToString("f2");
-                        mainWin.lz_val.Text = this.left_z.ToString("f2");
+                        //update values in gui
+                        debug.rx_val.Text = this.right_x.ToString("f2");
+                        debug.ry_val.Text = this.right_y.ToString("f2");
+                        debug.rz_val.Text = this.right_z.ToString("f2");
+                        
+                        debug.lx_val.Text = this.left_x.ToString("f2");
+                        debug.ly_val.Text = this.left_y.ToString("f2");
+                        debug.lz_val.Text = this.left_z.ToString("f2");
 
-                        mainWin.mx_val.Text = this.cursor_x.ToString("f2");
-                        mainWin.my_val.Text = this.cursor_y.ToString("f2");
-                        */
+                        debug.mx_val.Text = this.cursor_x.ToString("f2");
+                        debug.my_val.Text = this.cursor_y.ToString("f2");
 
                         alreadyTrackedPos = true;
 
@@ -254,41 +257,55 @@ namespace KinectV2MouseControl
                             if (((body.HandRightState == HandState.Closed) && !wasRightGrip)
                                 && ((body.HandLeftState == HandState.Closed) && !wasLeftGrip))
                             {
-                                if ((left_x == left_x1) && (right_x == right_x1))
-                                {}
+                                // using this logic: (handRight.Z - spineBase.Z < -0.15f) && (handLeft.Z - spineBase.Z < -0.15f)
+                                // we can denote that the x and y are relative to the spine instead of the 0,0 of the kinect sensor
+                                // thus we get positive values on the right hand and negative values on the left
+                                right_x = handRight.X - spineBase.X;
+                                left_x = handLeft.X - spineBase.X;
+
+                                if (left_x1 == right_x1 && right_x1 == 0)
+                                {
+                                    //this is used to start up windows magnify tool if this piece of code is checked for the first time
+                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
+                                    InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
+                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
+                                }
+
+                                //moved keydown from below to here
+                                InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
+
+                                //if current left and right values are equal to the old values then do nothing
+                                if ((left_x == left_x1) && (right_x == right_x1));
+                                //visual studio will note this semi colon as a mistakenly empty statement -> intentional
+
                                 //when both hands are closed and are moving in and out to zoom in/out
                                 else if ((left_x > left_x1) && (right_x < right_x1))
                                 {
-                                    if(left_x1==right_x1 && right_x1==0)
-                                    {
-                                        InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
-                                        InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
-                                        InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
-                                    }
                                     //send zoom  out
                                     //KEYS USED FOR THIS PROGRAM
                                     //VK_LWIN / VK_RWIN
                                     //VK_ADD
                                     //VK_SUBTRACT
-                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
                                     InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
-                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
                                 }
                                 else if ((left_x < left_x1) && (right_x > right_x1))
                                 {
                                     //send zoom in
-                                    InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
                                     InputSimulator.SimulateKeyPress(VirtualKeyCode.SUBTRACT);
-                                    InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
                                 }
+
+                                //setting the new values to old values
+                                right_x1 = right_x;
+                                left_x1 = left_x;
+
                                 wasRightGrip = true;
                                 wasLeftGrip = true;
                             }
                             else if (((body.HandRightState == HandState.Open || body.HandRightState == HandState.Lasso) && wasRightGrip)
                                 && ((body.HandLeftState == HandState.Open || body.HandLeftState == HandState.Lasso) && wasLeftGrip))
                             {
-                                //this is for release and navigate windows in magnified state
-                                //release grips and keyboard commands
+                                //moved the keyup to here from above
+                                InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
                                 wasRightGrip = false;
                                 wasLeftGrip = false;
                             }
@@ -319,8 +336,27 @@ namespace KinectV2MouseControl
                         this.cursor_x = (int)(curPos.X + (x * mouseSensitivity * screenWidth - curPos.X) * smoothing);
                         this.cursor_y = (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing);
                         MouseControl.SetCursorPos(this.cursor_x, this.cursor_y);
-
+                        
                         alreadyTrackedPos = true;
+                        
+                        this.left_x = handLeft.X - spineBase.X + 0.03f;
+                        this.left_y = handLeft.Y - spineBase.Y + 0.51f;
+                        this.left_z = handLeft.Z;
+
+                        this.cursor_x = (int)curPos.X;
+                        this.cursor_y = (int)curPos.Y;
+
+                        //update values in gui
+                        debug.rx_val.Text = this.right_x.ToString("f2");
+                        debug.ry_val.Text = this.right_y.ToString("f2");
+                        debug.rz_val.Text = this.right_z.ToString("f2");
+
+                        debug.lx_val.Text = this.left_x.ToString("f2");
+                        debug.ly_val.Text = this.left_y.ToString("f2");
+                        debug.lz_val.Text = this.left_z.ToString("f2");
+
+                        debug.mx_val.Text = this.cursor_x.ToString("f2");
+                        debug.my_val.Text = this.cursor_y.ToString("f2");
 
                         // Grip gesture
                         if (doClick && useGripGesture)
@@ -350,6 +386,25 @@ namespace KinectV2MouseControl
                         this.cursor_y = (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing);
                         MouseControl.SetCursorPos(this.cursor_x,this.cursor_y);
                         alreadyTrackedPos = true;
+
+                        this.right_x = handRight.X - spineBase.X + 0.05f;
+                        this.right_y = spineBase.Y - handRight.Y + 0.51f;
+                        this.right_z = handRight.Z;
+
+                        this.cursor_x = (int)curPos.X;
+                        this.cursor_y = (int)curPos.Y;
+
+                        //update values in gui
+                        debug.rx_val.Text = this.right_x.ToString("f2");
+                        debug.ry_val.Text = this.right_y.ToString("f2");
+                        debug.rz_val.Text = this.right_z.ToString("f2");
+
+                        debug.lx_val.Text = this.left_x.ToString("f2");
+                        debug.ly_val.Text = this.left_y.ToString("f2");
+                        debug.lz_val.Text = this.left_z.ToString("f2");
+
+                        debug.mx_val.Text = this.cursor_x.ToString("f2");
+                        debug.my_val.Text = this.cursor_y.ToString("f2");
 
                         if (doClick && useGripGesture)
                         {

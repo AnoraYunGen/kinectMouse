@@ -32,6 +32,7 @@
                     <Label Content="Cursor Smoothing" Margin="19,208,114,0" VerticalAlignment="Top" Height="24" Grid.ColumnSpan="2"/>
                     <TextBox x:Name="txtCursorSmoothing" Height="22" Margin="0,208,17,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0.4" FontSize="15" TextAlignment="Right" HorizontalAlignment="Right" Width="78" KeyDown="txtPauseThresold_KeyDown" Grid.Column="1"/>
                     <Label Content="" HorizontalAlignment="Left" Margin="10,301,0,0" VerticalAlignment="Top" Height="24" Width="10"/>
+                    <Button x:Name="btnDebug" Content="Debug" Grid.Column="1" HorizontalAlignment="Left" Margin="266,267,0,0" VerticalAlignment="Top" Width="75" Click="btnDebug_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>

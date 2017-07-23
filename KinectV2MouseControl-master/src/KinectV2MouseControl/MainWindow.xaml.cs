@@ -6,6 +6,7 @@ namespace KinectV2MouseControl
     public partial class MainWindow : Window
     {
         KinectControl kinectCtrl = new KinectControl();
+        DebugWindow debug = new DebugWindow();
 
         public MainWindow()
         {
@@ -165,6 +166,11 @@ namespace KinectV2MouseControl
                 Properties.Settings.Default.CursorSmoothing = kinectCtrl.cursorSmoothing;
                 Properties.Settings.Default.Save();
             }
+        }
+
+        private void btnDebug_Click(object sender, RoutedEventArgs e)
+        {
+            debug.Show();
         }
     }
 }
