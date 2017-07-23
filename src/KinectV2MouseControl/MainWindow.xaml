@@ -36,17 +36,20 @@
             </TabItem>
             <TabItem Header="Debug">
                 <Grid Background="White" HorizontalAlignment="Right" Width="446">
-                    <Label x:Name="Right" Content="Right Hand&#xD;&#xA;" HorizontalAlignment="Left" Margin="67,10,0,0" VerticalAlignment="Top" Width="84"/>
+                    <Label x:Name="Right" Content="Right Hand&#xD;&#xA;" HorizontalAlignment="Left" Margin="72,10,0,0" VerticalAlignment="Top" Width="79" Height="26"/>
                     <Label x:Name="Left" Content="Left Hand" HorizontalAlignment="Left" Margin="156,10,0,0" VerticalAlignment="Top" Width="84"/>
-                    <Label x:Name="X_val" Content="X Values" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top" Width="57" Height="29"/>
-                    <Label x:Name="Y_val" Content="Y Values" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="57" Height="29"/>
-                    <Label x:Name="Z_val" Content="Z Values" HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="57" Height="29"/>
-                    <TextBox x:Name="rx_val" HorizontalAlignment="Left" Height="29" Margin="72,57,0,0" TextWrapping="Wrap" Text="RIght X" VerticalAlignment="Top" Width="79" TextChanged="rx_val_TextChanged"/>
-                    <TextBox x:Name="ry_val" HorizontalAlignment="Left" Height="29" Margin="72,91,0,0" TextWrapping="Wrap" Text="Right Y" VerticalAlignment="Top" Width="79" TextChanged="ry_val_TextChanged"/>
-                    <TextBox x:Name="rz_val" HorizontalAlignment="Left" Height="29" Margin="72,125,0,0" TextWrapping="Wrap" Text="Right Z" VerticalAlignment="Top" Width="79" TextChanged="rz_val_TextChanged"/>
-                    <TextBox x:Name="lx_val" HorizontalAlignment="Left" Height="29" Margin="156,57,0,0" TextWrapping="Wrap" Text="Left X" VerticalAlignment="Top" Width="84" TextChanged="lx_val_TextChanged"/>
-                    <TextBox x:Name="ly_val" HorizontalAlignment="Left" Height="29" Margin="156,91,0,0" TextWrapping="Wrap" Text="Left Y" VerticalAlignment="Top" Width="84" TextChanged="ly_val_TextChanged"/>
-                    <TextBox x:Name="lz_val" HorizontalAlignment="Left" Height="29" Margin="156,125,0,0" TextWrapping="Wrap" Text="Left Z" VerticalAlignment="Top" Width="84" TextChanged="lz_val_TextChanged"/>
+                    <Label x:Name="X_val" Content="X Values" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="57" Height="29"/>
+                    <Label x:Name="Y_val" Content="Y Values" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Width="57" Height="29"/>
+                    <Label x:Name="Z_val" Content="Z Values" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="57" Height="29"/>
+                    <Label x:Name="Mouse" Content="Mouse" HorizontalAlignment="Left" Margin="245,10,0,0" VerticalAlignment="Top" Width="84"/>
+                    <TextBox x:Name="rx_val" HorizontalAlignment="Left" Height="29" Margin="72,41,0,0" TextWrapping="Wrap" Text="RIght X" VerticalAlignment="Top" Width="79" TextChanged="rx_val_TextChanged"/>
+                    <TextBox x:Name="ry_val" HorizontalAlignment="Left" Height="29" Margin="72,75,0,0" TextWrapping="Wrap" Text="Right Y" VerticalAlignment="Top" Width="79" TextChanged="ry_val_TextChanged"/>
+                    <TextBox x:Name="rz_val" HorizontalAlignment="Left" Height="29" Margin="72,109,0,0" TextWrapping="Wrap" Text="Right Z" VerticalAlignment="Top" Width="79" TextChanged="rz_val_TextChanged"/>
+                    <TextBox x:Name="lx_val" HorizontalAlignment="Left" Height="29" Margin="156,41,0,0" TextWrapping="Wrap" Text="Left X" VerticalAlignment="Top" Width="84" TextChanged="lx_val_TextChanged"/>
+                    <TextBox x:Name="ly_val" HorizontalAlignment="Left" Height="29" Margin="156,75,0,0" TextWrapping="Wrap" Text="Left Y" VerticalAlignment="Top" Width="84" TextChanged="ly_val_TextChanged"/>
+                    <TextBox x:Name="lz_val" HorizontalAlignment="Left" Height="29" Margin="156,109,0,0" TextWrapping="Wrap" Text="Left Z" VerticalAlignment="Top" Width="84" TextChanged="lz_val_TextChanged"/>
+                    <TextBox x:Name="mx_val" HorizontalAlignment="Left" Height="29" Margin="245,41,0,0" TextWrapping="Wrap" Text="Mouse X" VerticalAlignment="Top" Width="84" TextChanged="mx_val_TextChanged"/>
+                    <TextBox x:Name="my_val" HorizontalAlignment="Left" Height="29" Margin="245,75,0,0" TextWrapping="Wrap" Text="Mouse Y" VerticalAlignment="Top" Width="84" TextChanged="my_val_TextChanged"/>
                 </Grid>
             </TabItem>
         </TabControl>

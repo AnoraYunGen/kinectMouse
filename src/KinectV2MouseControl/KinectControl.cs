@@ -214,8 +214,13 @@ namespace KinectV2MouseControl
                     CameraSpacePoint handRight = body.Joints[JointType.HandRight].Position;
                     CameraSpacePoint spineBase = body.Joints[JointType.SpineBase].Position;
 
+                    //if both hands lift up
                     if ((handRight.Z - spineBase.Z < -0.15f) && (handLeft.Z - spineBase.Z < -0.15f))
                     {
+                        // this portion of the code is used to return the x,y values of the cursor to the gui
+                        Point curPos = MouseControl.GetCursorPosition();
+                        this.cursor_x = (int)curPos.X;
+                        this.cursor_y = (int)curPos.Y;
                         //this portion (if clause) was added to add another guesture
                         //specifically the windows magnification tool using keyboard shortcut 'windows'+'+' or 'windows'+'-'
                         this.right_x = handRight.X - spineBase.X + 0.05f;
@@ -268,7 +273,9 @@ namespace KinectV2MouseControl
                         // smoothing for using should be 0 - 0.95f. The way we smooth the cusor is: oldPos + (newPos - oldPos) * smoothValue
                         float smoothing = 1 - cursorSmoothing;
                         // set cursor position
-                        MouseControl.SetCursorPos((int)(curPos.X + (x * mouseSensitivity * screenWidth - curPos.X) * smoothing), (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
+                        this.cursor_x = (int)(curPos.X + (x * mouseSensitivity * screenWidth - curPos.X) * smoothing);
+                        this.cursor_y = (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing);
+                        MouseControl.SetCursorPos(this.cursor_x, this.cursor_y);
 
                         alreadyTrackedPos = true;
 
@@ -296,8 +303,9 @@ namespace KinectV2MouseControl
                         this.left_z = spineBase.Z - handLeft.Z;
                         Point curPos = MouseControl.GetCursorPosition();
                         float smoothing = 1 - cursorSmoothing;
-                        MouseControl.SetCursorPos((int)(curPos.X + (x * mouseSensitivity * screenWidth - curPos.X) * smoothing),
-                                                  (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
+                        this.cursor_x = (int)(curPos.X + (x * mouseSensitivity * screenWidth - curPos.X) * smoothing);
+                        this.cursor_y = (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing);
+                        MouseControl.SetCursorPos(this.cursor_x,this.cursor_y);
                         alreadyTrackedPos = true;
 
                         if (doClick && useGripGesture)

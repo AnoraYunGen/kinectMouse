@@ -220,5 +220,21 @@ namespace KinectV2MouseControl
                 lz_val.Text = kinectCtrl.left_z.ToString("f2");
             }
         }
+
+        private void mx_val_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if(mx_val.IsLoaded)
+            {
+                mx_val.Text = kinectCtrl.cursor_x.ToString("f2");
+            }
+        }
+
+        private void my_val_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (my_val.IsLoaded)
+            {
+                my_val.Text = kinectCtrl.cursor_y.ToString("f2");
+            }
+        }
     }
 }
