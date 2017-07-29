@@ -260,36 +260,17 @@ namespace KinectV2MouseControl
                             // thus we get positive values on the right hand and negative values on the left
                             right_x = handRight.X - spineBase.X;
                             left_x = handLeft.X - spineBase.X;
+                            
+                            if (left_x1 == right_x1 && right_x1 == 0) //this is used to start up windows magnify tool if this piece of code is checked for the first time
+                                System.Diagnostics.Process.Start("C:\\WINDOWS\\system32\\Magnifier.exe");//a '\' is used for escape sequence so \\ is needed
 
-                            if (left_x1 == right_x1 && right_x1 == 0)
-                            {
-                                //this is used to start up windows magnify tool if this piece of code is checked for the first time
-                                //InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
-                                InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
-                                //InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
-                            }
-
-                            //if current left and right values are equal to the old values then do nothing
-                            if ((left_x == left_x1) && (right_x == right_x1));
-                            //visual studio will note this semi colon as a mistakenly empty statement -> intentional
-
+                            if ((left_x == left_x1) && (right_x == right_x1)); //visual studio will note this semi colon as a mistakenly empty statement -> intentional
                             //when both hands are closed and are moving in and out to zoom in/out
-                            else if ((left_x > left_x1) && (right_x < right_x1))
-                            {
-                                //send zoom  out
-                                //KEYS USED FOR THIS PROGRAM
-                                //VK_LWIN / VK_RWIN
-                                //VK_ADD
-                                //VK_SUBTRACT
+                            else if ((left_x > left_x1) && (right_x < right_x1)) // send zoom in
                                 InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
-                            }
-                            else if ((left_x < left_x1) && (right_x > right_x1))
-                            {
-                                //send zoom in
+                            else if ((left_x < left_x1) && (right_x > right_x1)) // send zoom out
                                 InputSimulator.SimulateKeyPress(VirtualKeyCode.SUBTRACT);
-                            }
-
-
+                            
                             //setting the new values to old values
                             right_x1 = right_x;
                             left_x1 = left_x;
@@ -301,8 +282,6 @@ namespace KinectV2MouseControl
                             && ((body.HandLeftState == HandState.Open || body.HandLeftState == HandState.Lasso) && wasLeftGrip))
                         {
                             InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
-                            //moved the keyup to here from above
-                            //InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
                             wasRightGrip = false;
                             wasLeftGrip = false;
                         }

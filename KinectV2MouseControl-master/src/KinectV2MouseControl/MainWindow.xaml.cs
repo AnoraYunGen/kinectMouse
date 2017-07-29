@@ -1,6 +1,6 @@
 ﻿//using System;
 using System.Windows;
-using System.Windows.Input;
+//using System.Windows.Input;
 //using System.Windows.Threading;
 
 namespace KinectV2MouseControl
@@ -15,7 +15,9 @@ namespace KinectV2MouseControl
         public MainWindow()
         {
             InitializeComponent();
-            rfsh_lbl_timer();
+            refresh_tmr.Tick += new System.EventHandler(refresh_lbls);
+            refresh_tmr.Interval = (1) * (timer_ms); // refresh every 1/2 second
+            refresh_tmr.Start();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -30,7 +32,6 @@ namespace KinectV2MouseControl
                 rdiGrip.IsChecked = true;
             else
                 rdiPause.IsChecked = true;
-
         }
 
         private void MouseSensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -84,11 +85,6 @@ namespace KinectV2MouseControl
         
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
-            save_values();
-        }
-
-        private void save_values()
-        {
             Properties.Settings.Default.MouseSensitivity = (float)MouseSensitivity.Value;
             Properties.Settings.Default.PauseToClickTime = (float)PauseToClickTime.Value;
             Properties.Settings.Default.PauseThresold = (float)PauseThresold.Value;
@@ -136,108 +132,82 @@ namespace KinectV2MouseControl
 
         private void btn_msn_Click(object sender, RoutedEventArgs e)
         {
-            if (MouseSensitivity.IsLoaded)
-            {
-                MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)kinectCtrl.mouseSensitivity - (float)0.1;
-                if (kinectCtrl.mouseSensitivity < 1)
-                    MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)1;
-                txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
-            }
+            MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)kinectCtrl.mouseSensitivity - (float)0.1;
+            if (kinectCtrl.mouseSensitivity < 1)
+                MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)1;
+            txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
         }
 
         private void btn_msp_Click(object sender, RoutedEventArgs e)
         {
-            if (MouseSensitivity.IsLoaded)
-            {
-                MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)kinectCtrl.mouseSensitivity + (float)0.1;
-                if (kinectCtrl.mouseSensitivity > 5)
-                    MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)5;
-                txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
-            }
+            MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)kinectCtrl.mouseSensitivity + (float)0.1;
+            if (kinectCtrl.mouseSensitivity > 5)
+                MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)5;
+            txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
         }
 
         private void btn_trn_Click(object sender, RoutedEventArgs e)
         {
-            if (PauseToClickTime.IsLoaded)
-            {
-                PauseToClickTime.Value = kinectCtrl.timeRequired = (float)kinectCtrl.timeRequired - (float)0.1;
-                if (kinectCtrl.timeRequired < 0.3)
-                    PauseToClickTime.Value = kinectCtrl.timeRequired = (float)0.3;
-                txtTimeRequired.Text = kinectCtrl.timeRequired.ToString("f2");
-
-                Properties.Settings.Default.PauseToClickTime = kinectCtrl.timeRequired;
-                Properties.Settings.Default.Save();
-            }
+            PauseToClickTime.Value = kinectCtrl.timeRequired = (float)kinectCtrl.timeRequired - (float)0.1;
+            if (kinectCtrl.timeRequired < 0.3)
+                PauseToClickTime.Value = kinectCtrl.timeRequired = (float)0.3;
+            txtTimeRequired.Text = kinectCtrl.timeRequired.ToString("f2");
         }
 
         private void btn_trp_Click(object sender, RoutedEventArgs e)
         {
-            if (PauseToClickTime.IsLoaded)
-            {
-                PauseToClickTime.Value = kinectCtrl.timeRequired = (float)kinectCtrl.timeRequired + (float)0.1;
-                if (kinectCtrl.timeRequired > 5)
-                    PauseToClickTime.Value = kinectCtrl.timeRequired = (float)5;
-                txtTimeRequired.Text = kinectCtrl.timeRequired.ToString("f2");
-            }
+            PauseToClickTime.Value = kinectCtrl.timeRequired = (float)kinectCtrl.timeRequired + (float)0.1;
+            if (kinectCtrl.timeRequired > 5)
+                PauseToClickTime.Value = kinectCtrl.timeRequired = (float)5;
+            txtTimeRequired.Text = kinectCtrl.timeRequired.ToString("f2");
         }
 
         private void btn_mtn_Click(object sender, RoutedEventArgs e)
         {
-            if (PauseThresold.IsLoaded && (kinectCtrl.pauseThresold > 10))
-            {
-                PauseThresold.Value = kinectCtrl.pauseThresold = (float)kinectCtrl.pauseThresold - (float)1;
-                if (kinectCtrl.pauseThresold < 10)
-                    PauseThresold.Value = kinectCtrl.pauseThresold = (float)10;
-                txtPauseThresold.Text = kinectCtrl.pauseThresold.ToString("f2");
-            }
+            PauseThresold.Value = kinectCtrl.pauseThresold = (float)kinectCtrl.pauseThresold - (float)1;
+            if (kinectCtrl.pauseThresold < 10)
+                PauseThresold.Value = kinectCtrl.pauseThresold = (float)10;
+            txtPauseThresold.Text = kinectCtrl.pauseThresold.ToString("f2");
         }
 
         private void btn_mtp_Click(object sender, RoutedEventArgs e)
         {
-            if (PauseThresold.IsLoaded && (kinectCtrl.pauseThresold < 160))
-            {
                 PauseThresold.Value = kinectCtrl.pauseThresold = (float)kinectCtrl.pauseThresold + (float)1;
                 if (kinectCtrl.pauseThresold > 160)
                     PauseThresold.Value = kinectCtrl.pauseThresold = (float)160;
                 txtPauseThresold.Text = kinectCtrl.pauseThresold.ToString("f2");
-            }
         }
 
         private void btn_csn_Click(object sender, RoutedEventArgs e)
         {
-            if (CursorSmoothing.IsLoaded && (kinectCtrl.cursorSmoothing > 0))
-            {
-                CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)kinectCtrl.cursorSmoothing - (float)0.05;
-                if (kinectCtrl.cursorSmoothing < 0)
-                    CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)0;
-                txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
-            }
+            CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)kinectCtrl.cursorSmoothing - (float)0.05;
+            if (kinectCtrl.cursorSmoothing < 0)
+                CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)0;
+            txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
         }
 
         private void btn_csp_Click(object sender, RoutedEventArgs e)
         {
-            if (CursorSmoothing.IsLoaded && (kinectCtrl.cursorSmoothing < 1.00))
-            {
-                CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)kinectCtrl.cursorSmoothing + (float)0.05;
-                if (kinectCtrl.cursorSmoothing > 1)
-                    CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)1;
-                txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
-            }
+            CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)kinectCtrl.cursorSmoothing + (float)0.05;
+            if (kinectCtrl.cursorSmoothing > 1)
+                CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)1;
+            txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
         }
 
         private void refresh_lbls(object sender, System.EventArgs e)
         {
             rfsh_lbls();
         }
+
         private void rfsh_lbls()
         {
-            //Main menu
+            //Main menu value updates
             txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
             txtTimeRequired.Text = kinectCtrl.timeRequired.ToString("f2");
             txtPauseThresold.Text = kinectCtrl.pauseThresold.ToString("f2");
             txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
 
-            //Debug Menu
+            //Debug Menu value updates
             rix_val.Text = kinectCtrl.right_x.ToString("f2");
             lex_val.Text = kinectCtrl.left_x.ToString("f2");
             mox_val.Text = kinectCtrl.cursor_x.ToString("f2");
@@ -256,13 +226,10 @@ namespace KinectV2MouseControl
 
             se_val.Text = kinectCtrl.mouseSensitivity.ToString("f2");
             cs_val.Text = kinectCtrl.cursorSmoothing.ToString("f2");
-            gr_val.Text = rdiGrip.IsChecked.ToString();
-        }
-        private void rfsh_lbl_timer()
-        {
-            refresh_tmr.Tick += new System.EventHandler(refresh_lbls);
-            refresh_tmr.Interval = (1) * (timer_ms); // refresh every 1/2 second
-            refresh_tmr.Start();
+            kinectCtrl.useGripGesture = rdiGrip.IsChecked.Value;
+            gr_val.Text = kinectCtrl.useGripGesture.ToString();
+            kinectCtrl.doClick = chkNoClick.IsChecked.Value;
+            cl_val.Text = kinectCtrl.doClick.ToString();
         }
     }
 }

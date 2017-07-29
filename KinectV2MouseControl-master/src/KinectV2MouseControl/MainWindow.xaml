@@ -24,7 +24,7 @@
                     <TextBox x:Name="txtPauseThresold" Height="21" Margin="0,128,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="60.00" FontSize="15" TextAlignment="Right" HorizontalAlignment="Right" Width="78" Grid.Column="1"/>
                     <TextBox x:Name="txtCursorSmoothing" Height="22" Margin="0,188,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0.40" FontSize="15" TextAlignment="Right" HorizontalAlignment="Right" Width="78" Grid.Column="1" RenderTransformOrigin="0.679,-0.5"/>
 
-                    <CheckBox x:Name="chkNoClick" Content="No clicks, move cursor only" HorizontalAlignment="Left" Margin="165,251,0,0" Height="14" VerticalAlignment="Top" Checked="chkNoClick_Checked" Unchecked="chkNoClick_Unchecked" Width="164" Grid.Column="1"/>
+                    <CheckBox x:Name="chkNoClick" Content="Move Cursor Only" HorizontalAlignment="Left" Margin="180,250,0,0" Height="14" VerticalAlignment="Top" Checked="chkNoClick_Checked" Unchecked="chkNoClick_Unchecked" Width="125" Grid.Column="1"/>
                     <RadioButton x:Name="rdiGrip" Content="Grip Gesture" HorizontalAlignment="Left" Margin="243,274,0,0" VerticalAlignment="Top" GroupName="GestureMode" Checked="rdiGrip_Checked" Height="15" Width="86" Grid.Column="1"/>
                     <RadioButton x:Name="rdiPause" Content="Pause To Click" HorizontalAlignment="Left" Margin="145,274,0,0" VerticalAlignment="Top" GroupName="GestureMode" Checked="rdiPause_Checked" Height="13" Width="93" Grid.Column="1"/>
                     <Slider x:Name="PauseToClickTime" Margin="46,97,45,0" VerticalAlignment="Top" Height="25" Maximum="5" SmallChange="0.01" Value="2" ValueChanged="PauseToClickTime_ValueChanged" Minimum="0.3" Grid.ColumnSpan="2"/>
@@ -53,21 +53,22 @@
                         <ColumnDefinition Width="429*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label x:Name="lblRight" Content="Right Hand&#xA;" HorizontalAlignment="Left" Margin="53,10,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Right" Content="Right Hand&#xA;" HorizontalAlignment="Left" Margin="53,10,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
                     <Label x:Name="lblX_val" Content="X Values" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="57" Height="29" Grid.ColumnSpan="2"/>
                     <Label x:Name="lblY_val" Content="Y Values" HorizontalAlignment="Left" Margin="10,75,0,0" VerticalAlignment="Top" Width="57" Height="29" Grid.ColumnSpan="2"/>
                     <Label x:Name="lblZ_val" Content="Z Values" HorizontalAlignment="Left" Margin="10,109,0,0" VerticalAlignment="Top" Width="57" Height="29" Grid.ColumnSpan="2"/>
-                    <Label x:Name="lblLeft" Content="Left Hand&#xA;" HorizontalAlignment="Left" Margin="137,10,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
-                    <Label x:Name="lblSpine" Content="Spine" HorizontalAlignment="Left" Margin="221,10,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
-                    <Label x:Name="lblLeft_right" Content="Left-Right" HorizontalAlignment="Left" Margin="305,10,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Left" Content="Left Hand&#xA;" HorizontalAlignment="Left" Margin="137,10,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Spine" Content="Spine" HorizontalAlignment="Left" Margin="221,10,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Left_right" Content="Left-Right" HorizontalAlignment="Left" Margin="305,10,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
                     <Label x:Name="lblX_val1" Content="X Values" HorizontalAlignment="Left" Margin="10,174,0,0" VerticalAlignment="Top" Width="57" Height="29" Grid.ColumnSpan="2"/>
                     <Label x:Name="lblY_val1" Content="Y Values" HorizontalAlignment="Left" Margin="10,208,0,0" VerticalAlignment="Top" Width="57" Height="29" Grid.ColumnSpan="2"/>
-                    <Label x:Name="lblMouse" Content="Cursor" HorizontalAlignment="Left" Margin="53,143,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
-                    <Label x:Name="lblScreen" Content="Screen&#xA;" HorizontalAlignment="Left" Margin="137,143,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
-                    <Label x:Name="lblValues" Content="Values" HorizontalAlignment="Left" Margin="305,143,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
-                    <Label x:Name="lblSensitivity" Content="Sensitivity" HorizontalAlignment="Left" Margin="221,174,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
-                    <Label x:Name="lblCursor_smooth" Content="Cursor Smth" HorizontalAlignment="Left" Margin="221,208,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
-                    <Label x:Name="lblGrip" Content="Grip" HorizontalAlignment="Left" Margin="221,242,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Mouse" Content="Cursor" HorizontalAlignment="Left" Margin="53,143,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Screen" Content="Screen&#xA;" HorizontalAlignment="Left" Margin="137,143,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Values" Content="Values" HorizontalAlignment="Left" Margin="305,143,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Sensitivity" Content="Sensitivity" HorizontalAlignment="Left" Margin="221,174,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Cursor_smooth" Content="Cursor Smth" HorizontalAlignment="Left" Margin="221,208,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Grip" Content="Grip" HorizontalAlignment="Left" Margin="221,242,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
+                    <Label x:Name="lbl_Clicking" Content="Clicking" HorizontalAlignment="Left" Margin="221,276,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
 
                     <TextBox x:Name="rix_val" HorizontalAlignment="Left" Height="29" Margin="53,41,0,0" TextWrapping="Wrap" Text="RIght X" VerticalAlignment="Top" Width="79" Grid.Column="1"/>
                     <TextBox x:Name="riy_val" HorizontalAlignment="Left" Height="29" Margin="53,75,0,0" TextWrapping="Wrap" Text="Right Y" VerticalAlignment="Top" Width="79" Grid.Column="1"/>
@@ -87,6 +88,7 @@
                     <TextBox x:Name="se_val" HorizontalAlignment="Left" Height="29" Margin="305,174,0,0" TextWrapping="Wrap" Text="Sensitivity Val" VerticalAlignment="Top" Width="79" Grid.Column="1"/>
                     <TextBox x:Name="cs_val" HorizontalAlignment="Left" Height="29" Margin="305,208,0,0" TextWrapping="Wrap" Text="CS Val" VerticalAlignment="Top" Width="79" Grid.Column="1"/>
                     <TextBox x:Name="gr_val" HorizontalAlignment="Left" Height="29" Margin="305,242,0,0" TextWrapping="Wrap" Text="T/F" VerticalAlignment="Top" Width="79" Grid.Column="1"/>
+                    <TextBox x:Name="cl_val" HorizontalAlignment="Left" Height="29" Margin="305,276,0,0" TextWrapping="Wrap" Text="T/F" VerticalAlignment="Top" Width="79" Grid.Column="1"/>
 
                     <Image x:Name="UAH_blue_png1" Source="UAH_blue.png" Stretch="Fill" Margin="0,244,240,-4" Grid.ColumnSpan="2"/>
                 </Grid>
