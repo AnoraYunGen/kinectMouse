@@ -1,4 +1,4 @@
-﻿//using System;
+//using System;
 using System.Windows;
 using System.Windows.Input;
 //using System.Windows.Threading;
@@ -17,28 +17,13 @@ namespace KinectV2MouseControl
             InitializeComponent();
             rfsh_lbl_timer();
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            MouseSensitivity.Value = Properties.Settings.Default.MouseSensitivity;
-            PauseToClickTime.Value = Properties.Settings.Default.PauseToClickTime;
-            PauseThresold.Value = Properties.Settings.Default.PauseThresold;
-            chkNoClick.IsChecked = !Properties.Settings.Default.DoClick;
-            CursorSmoothing.Value = Properties.Settings.Default.CursorSmoothing;
-            
-            if (Properties.Settings.Default.GripGesture)
-                rdiGrip.IsChecked = true;
-            else
-                rdiPause.IsChecked = true;
-
-        }
-
+        
         private void MouseSensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (txtMouseSensitivity.IsLoaded)
             {
-                kinectCtrl.mouseSensitivity = (float)MouseSensitivity.Value;
-                txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
+                //kinectCtrl.mouseSensitivity = (float)MouseSensitivity.Value;
+                //txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
             }
         }
 
@@ -51,6 +36,50 @@ namespace KinectV2MouseControl
             }
         }
 
+        private void txtMouseSensitivity_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                float v;
+                if (float.TryParse(txtMouseSensitivity.Text, out v))
+                {
+                    MouseSensitivity.Value = v;
+                    kinectCtrl.mouseSensitivity = (float)MouseSensitivity.Value;
+                }
+            }
+        }
+
+        private void txtTimeRequired_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                float v;
+                if (float.TryParse(txtTimeRequired.Text, out v))
+                {
+                    PauseToClickTime.Value = v;
+                    kinectCtrl.timeRequired = (float)PauseToClickTime.Value;
+                }
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            MouseSensitivity.Value = Properties.Settings.Default.MouseSensitivity;
+            PauseToClickTime.Value = Properties.Settings.Default.PauseToClickTime;
+            PauseThresold.Value = Properties.Settings.Default.PauseThresold;
+            chkNoClick.IsChecked = !Properties.Settings.Default.DoClick;
+            CursorSmoothing.Value = Properties.Settings.Default.CursorSmoothing;
+            if (Properties.Settings.Default.GripGesture)
+            {
+                rdiGrip.IsChecked = true;
+            }
+            else
+            {
+                rdiPause.IsChecked = true;
+            }
+
+        }
+
         private void PauseThresold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (PauseThresold.IsLoaded)
@@ -60,29 +89,43 @@ namespace KinectV2MouseControl
             }
         }
 
-        private void CursorSmoothing_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void txtPauseThresold_KeyDown(object sender, KeyEventArgs e)
         {
-            if (CursorSmoothing.IsLoaded)
+            if (e.Key == Key.Enter)
             {
-                kinectCtrl.cursorSmoothing = (float)CursorSmoothing.Value;
-                txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
+                float v;
+                if (float.TryParse(txtPauseThresold.Text, out v))
+                {
+                    PauseThresold.Value = v;
+                    kinectCtrl.timeRequired = (float)PauseThresold.Value;
+                }
             }
         }
 
-        private void btn_Default_Click(object sender, RoutedEventArgs e)
+        private void btnDefault_Click(object sender, RoutedEventArgs e)
         {
-            MouseSensitivity.Value = KinectControl.MOUSE_SENSITIVITY;
+            txtMouseSensitivity.Text = KinectControl.MOUSE_SENSITIVITY.ToString("f2");//MouseSensitivity.Value = KinectControl.MOUSE_SENSITIVITY;
             PauseToClickTime.Value = KinectControl.TIME_REQUIRED;
             PauseThresold.Value = KinectControl.PAUSE_THRESOLD;
             CursorSmoothing.Value = KinectControl.CURSOR_SMOOTHING;
 
             chkNoClick.IsChecked = !KinectControl.DO_CLICK;
             rdiGrip.IsChecked = KinectControl.USE_GRIP_GESTURE;
-            
             rfsh_lbls();
         }
+
+        private void btnApply_Click(object sender, RoutedEventArgs e)
+        {
+            apply_values();
+        }
         
-        private void btn_Save_Click(object sender, RoutedEventArgs e)
+        private void apply_values()
+        {
+
+            save_values();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             save_values();
         }
@@ -93,7 +136,7 @@ namespace KinectV2MouseControl
             Properties.Settings.Default.PauseToClickTime = (float)PauseToClickTime.Value;
             Properties.Settings.Default.PauseThresold = (float)PauseThresold.Value;
             Properties.Settings.Default.CursorSmoothing = (float)CursorSmoothing.Value;
-            Properties.Settings.Default.PauseThresold = kinectCtrl.pauseThresold;
+			Properties.Settings.Default.PauseThresold = kinectCtrl.pauseThresold;
             Properties.Settings.Default.GripGesture = kinectCtrl.useGripGesture;
             Properties.Settings.Default.DoClick = kinectCtrl.doClick;
             Properties.Settings.Default.Save();
@@ -134,6 +177,15 @@ namespace KinectV2MouseControl
             rdiGripGestureChange();
         }
 
+        private void CursorSmoothing_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (CursorSmoothing.IsLoaded)
+            {
+                MouseSensitivity.Value = kinectCtrl.cursorSmoothing = (float)CursorSmoothing.Value;
+                txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
+            }
+        }
+
         private void btn_msn_Click(object sender, RoutedEventArgs e)
         {
             if (MouseSensitivity.IsLoaded)
@@ -155,7 +207,7 @@ namespace KinectV2MouseControl
                 txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
             }
         }
-
+        
         private void btn_trn_Click(object sender, RoutedEventArgs e)
         {
             if (PauseToClickTime.IsLoaded)
@@ -216,7 +268,7 @@ namespace KinectV2MouseControl
 
         private void btn_csp_Click(object sender, RoutedEventArgs e)
         {
-            if (CursorSmoothing.IsLoaded && (kinectCtrl.cursorSmoothing < 1.00))
+            if (CursorSmoothing.IsLoaded && (kinectCtrl.cursorSmoothing<1.00))
             {
                 CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)kinectCtrl.cursorSmoothing + (float)0.05;
                 if (kinectCtrl.cursorSmoothing > 1)
