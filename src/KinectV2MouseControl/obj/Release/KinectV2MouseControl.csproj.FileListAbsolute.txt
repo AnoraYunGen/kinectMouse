@@ -13,3 +13,6 @@ C:\Users\AYG\Desktop\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Re
 C:\Users\AYG\Desktop\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.csproj.GenerateResource.Cache
 C:\Users\AYG\Desktop\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.exe
 C:\Users\AYG\Desktop\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.pdb
+C:\Users\AYG\Desktop\KinectV2MouseControl-master\src\KinectV2MouseControl\bin\Release\InputSimulator.dll
+C:\Users\AYG\Desktop\KinectV2MouseControl-master\src\KinectV2MouseControl\bin\Release\InputSimulator.pdb
+C:\Users\AYG\Desktop\KinectV2MouseControl-master\src\KinectV2MouseControl\bin\Release\InputSimulator.xml
