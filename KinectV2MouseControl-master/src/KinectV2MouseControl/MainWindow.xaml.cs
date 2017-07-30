@@ -1,7 +1,4 @@
-﻿//using System;
-using System.Windows;
-//using System.Windows.Input;
-//using System.Windows.Threading;
+﻿using System.Windows;
 
 namespace KinectV2MouseControl
 {
@@ -229,7 +226,7 @@ namespace KinectV2MouseControl
             kinectCtrl.useGripGesture = rdiGrip.IsChecked.Value;
             gr_val.Text = kinectCtrl.useGripGesture.ToString();
             kinectCtrl.doClick = chkNoClick.IsChecked.Value;
-            cl_val.Text = kinectCtrl.doClick.ToString();
+            cl_val.Text = (!kinectCtrl.doClick).ToString();
         }
     }
 }
