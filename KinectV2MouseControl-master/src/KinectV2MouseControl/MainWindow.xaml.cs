@@ -23,7 +23,7 @@ namespace KinectV2MouseControl
             MouseSensitivity.Value = Properties.Settings.Default.MouseSensitivity;
             PauseToClickTime.Value = Properties.Settings.Default.PauseToClickTime;
             PauseThresold.Value = Properties.Settings.Default.PauseThresold;
-            chkNoClick.IsChecked = !Properties.Settings.Default.DoClick;
+            chkEnClick.IsChecked = !Properties.Settings.Default.DoClick;
             CursorSmoothing.Value = Properties.Settings.Default.CursorSmoothing;
             
             if (Properties.Settings.Default.GripGesture)
@@ -75,7 +75,7 @@ namespace KinectV2MouseControl
             PauseThresold.Value = KinectControl.PAUSE_THRESOLD;
             CursorSmoothing.Value = KinectControl.CURSOR_SMOOTHING;
 
-            chkNoClick.IsChecked = !KinectControl.DO_CLICK;
+            chkEnClick.IsChecked = !KinectControl.DO_CLICK;
             rdiGrip.IsChecked = KinectControl.USE_GRIP_GESTURE;
             
             rfsh_lbls();
@@ -93,19 +93,19 @@ namespace KinectV2MouseControl
             Properties.Settings.Default.Save();
         }
 
-        private void chkNoClick_Checked(object sender, RoutedEventArgs e)
+        private void chkEnClick_Checked(object sender, RoutedEventArgs e)
         {
-            chkNoClickChange();
+            chkEnClickChange();
         }
 
-        public void chkNoClickChange()
+        public void chkEnClickChange()
         {
-            kinectCtrl.doClick = !chkNoClick.IsChecked.Value;
+            kinectCtrl.doClick = !chkEnClick.IsChecked.Value;
         }
 
-        private void chkNoClick_Unchecked(object sender, RoutedEventArgs e)
+        private void chkEnClick_Unchecked(object sender, RoutedEventArgs e)
         {
-            chkNoClickChange();
+            chkEnClickChange();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -213,13 +213,13 @@ namespace KinectV2MouseControl
             lex_val.Text = kinectCtrl.left_x.ToString("f2");
             mox_val.Text = kinectCtrl.cursor_x.ToString("f2");
             spx_val.Text = kinectCtrl.spine_x.ToString("f2");
-            scx_val.Text = kinectCtrl.screenHeight.ToString("f2");
+            scx_val.Text = kinectCtrl.screenWidth.ToString("f2");
             lrx_val.Text = kinectCtrl.right_left_x.ToString("f2");
             riy_val.Text = kinectCtrl.right_y.ToString("f2");
             ley_val.Text = kinectCtrl.left_y.ToString("f2");
             moy_val.Text = kinectCtrl.cursor_y.ToString("f2");
             spy_val.Text = kinectCtrl.spine_y.ToString("f2");
-            scy_val.Text = kinectCtrl.screenWidth.ToString("f2");
+            scy_val.Text = kinectCtrl.screenHeight.ToString("f2");
             lry_val.Text = kinectCtrl.right_left_y.ToString("f2");
             riz_val.Text = kinectCtrl.right_z.ToString("f2");
             lez_val.Text = kinectCtrl.left_z.ToString("f2");
@@ -230,8 +230,8 @@ namespace KinectV2MouseControl
             cs_val.Text = kinectCtrl.cursorSmoothing.ToString("f2");
             kinectCtrl.useGripGesture = rdiGrip.IsChecked.Value;
             gr_val.Text = kinectCtrl.useGripGesture.ToString();
-            kinectCtrl.doClick = chkNoClick.IsChecked.Value;
-            cl_val.Text = (!kinectCtrl.doClick).ToString();
+            kinectCtrl.doClick = chkEnClick.IsChecked.Value;
+            cl_val.Text = (kinectCtrl.doClick).ToString();
         }
     }
 }

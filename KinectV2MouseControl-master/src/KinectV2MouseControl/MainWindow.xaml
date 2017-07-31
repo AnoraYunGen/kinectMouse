@@ -24,7 +24,7 @@
                     <TextBox x:Name="txtPauseThresold" Height="21" Margin="0,128,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="60.00" FontSize="15" TextAlignment="Right" HorizontalAlignment="Right" Width="78" Grid.Column="1"/>
                     <TextBox x:Name="txtCursorSmoothing" Height="22" Margin="0,188,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0.40" FontSize="15" TextAlignment="Right" HorizontalAlignment="Right" Width="78" Grid.Column="1" RenderTransformOrigin="0.679,-0.5"/>
 
-                    <CheckBox x:Name="chkNoClick" Content="Enable Clicking" HorizontalAlignment="Left" Margin="180,250,0,0" Height="14" VerticalAlignment="Top" Checked="chkNoClick_Checked" Unchecked="chkNoClick_Unchecked" Width="125" Grid.Column="1"/>
+                    <CheckBox x:Name="chkEnClick" Content="Enable Clicking" HorizontalAlignment="Left" Margin="180,250,0,0" Height="14" VerticalAlignment="Top" Checked="chkEnClick_Checked" Unchecked="chkEnClick_Unchecked" Width="125" Grid.Column="1"/>
                     <RadioButton x:Name="rdiGrip" Content="Grip Gesture" HorizontalAlignment="Left" Margin="243,274,0,0" VerticalAlignment="Top" GroupName="GestureMode" Checked="rdiGrip_Checked" Height="15" Width="86" Grid.Column="1"/>
                     <RadioButton x:Name="rdiPause" Content="Pause To Click" HorizontalAlignment="Left" Margin="145,274,0,0" VerticalAlignment="Top" GroupName="GestureMode" Checked="rdiPause_Checked" Height="13" Width="93" Grid.Column="1"/>
                     <Slider x:Name="PauseToClickTime" Margin="46,97,45,0" VerticalAlignment="Top" Height="25" Maximum="5" SmallChange="0.01" Value="2" ValueChanged="PauseToClickTime_ValueChanged" Minimum="0.3" Grid.ColumnSpan="2"/>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-//using System.Runtime.InteropServices;
 using System.Windows.Threading;
 using Microsoft.Kinect;
 using WindowsInput;
@@ -9,52 +8,27 @@ namespace KinectV2MouseControl
 {
     class KinectControl
     {
-        //DebugWindow dbg = new DebugWindow();
-        /// <summary>
         /// Active Kinect sensor
-        /// </summary>
         KinectSensor sensor;
-        /// <summary>
         /// Reader for body frames
-        /// </summary
         BodyFrameReader bodyFrameReader;
-        /// <summary>
         /// Array for the bodies
-        /// </summary>
         private Body[] bodies = null;
-        /// <summary>
         /// Screen width and height for determining the exact mouse sensitivity
-        /// </summary>
         public int screenWidth, screenHeight;
-        /// <summary>
         /// timer for pause-to-click feature
-        /// </summary>
         DispatcherTimer timer = new DispatcherTimer();
-        /// <summary>
         /// How far the cursor move according to your hand's movement
-        /// </summary>
         public float mouseSensitivity = MOUSE_SENSITIVITY;
-        /// <summary>
         /// Time required as a pause-clicking
-        /// </summary>
         public float timeRequired = TIME_REQUIRED;
-        /// <summary>
         /// The radius range your hand move inside a circle for [timeRequired] seconds would be regarded as a pause-clicking
-        /// </summary>
         public float pauseThresold = PAUSE_THRESOLD;
-        /// <summary>
         /// Decide if the user need to do clicks or only move the cursor
-        /// </summary>
         public bool doClick = DO_CLICK;
-        /*
-        /// <summary>
         /// Use Grip gesture to click or not
-        /// </summary>
-        */
         public bool useGripGesture = USE_GRIP_GESTURE;
-        /// <summary>
         /// Value 0 - 0.95f, the larger it is, the smoother the cursor would move
-        /// </summary>
         public float cursorSmoothing = CURSOR_SMOOTHING;
         // following values are used to get the values to show in the debug app
         public float left_x = 0.0f;
@@ -82,36 +56,23 @@ namespace KinectV2MouseControl
         public const bool DO_CLICK = true;
         public const bool USE_GRIP_GESTURE = true;
         public const float CURSOR_SMOOTHING = 0.4f;
-        
-        /// <summary>
         /// Determine if we have tracked the hand and used it to move the cursor,
         /// If false, meaning the user may not lift their hands, we don't get the last hand position and some actions like pause-to-click won't be executed.
-        /// </summary>
         bool alreadyTrackedPos = false;
-        /// <summary>
         /// for storing the time passed for pause-to-click
-        /// </summary>
         float timeCount = 0;
-        /// <summary>
         /// For storing last cursor position
-        /// </summary>
         Point lastCurPos = new Point(0, 0);
-        /// <summary>
         /// If true, user did a left hand Grip gesture
-        /// </summary>
         bool wasLeftGrip = false;
-        /// <summary>
         /// If true, user did a right hand Grip gesture
-        /// </summary>
         bool wasRightGrip = false;
-        /// <summary>
+        /// sleeptime is used for the keypress event
+        private const int sleeptime = 85;
         /// If true, user did a right hand Grip gesture
-        /// </summary>
         bool wasLRGrip = false;
-        /// <summary>
         /// this kinect control is for setting up the program to connect to the connect
         /// and also setting up the timer for the pause to click
-        /// </summary>
         public KinectControl()
         {
             // get Active Kinect Sensor
@@ -119,11 +80,9 @@ namespace KinectV2MouseControl
             // open the reader for the body frames
             bodyFrameReader = sensor.BodyFrameSource.OpenReader();
             bodyFrameReader.FrameArrived += bodyFrameReader_FrameArrived;
-
-            // get screen with and height
-            this.screenWidth = (int)SystemParameters.PrimaryScreenWidth;
+            // get the screen x,y values
             this.screenHeight = (int)SystemParameters.PrimaryScreenHeight;
-
+            this.screenWidth = (int)SystemParameters.PrimaryScreenWidth;
             // set up timer, execute every 0.1s
             timer.Interval = new TimeSpan(0, 0, 0, 0, 100); 
             timer.Tick += new EventHandler(Timer_Tick);
@@ -131,9 +90,7 @@ namespace KinectV2MouseControl
             // open the sensor
             sensor.Open();
         }
-        /// <summary>
         /// Pause to click timer
-        /// </summary>
         void Timer_Tick(object sender, EventArgs e)
         {
             if (!doClick || useGripGesture)
@@ -157,10 +114,7 @@ namespace KinectV2MouseControl
 
             lastCurPos = curPos;
         }
-
-        /// <summary>
         /// Read body frames
-        /// </summary>
         void bodyFrameReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             bool dataReceived = false;
@@ -211,26 +165,22 @@ namespace KinectV2MouseControl
                     this.right_left_x = this.right_x - this.left_x;
                     this.right_left_y = this.right_y + this.left_y;
                     this.handdistance = (float)Math.Sqrt(Math.Pow(this.right_left_x, 2) + Math.Pow(this.right_left_y, 2) + Math.Pow(this.right_left_z, 2));
-                    
-                    this.screenWidth = (int)SystemParameters.PrimaryScreenWidth;
-                    this.screenHeight = (int)SystemParameters.PrimaryScreenHeight;
-
                     //if both hands lift up
                     if ((handRight.Z - spineBase.Z < -0.15f) && (handLeft.Z - spineBase.Z < -0.15f))
                     {
                         //this portion (if clause) was added to add another guesture
                         //specifically the windows magnification tool using keyboard shortcut 'windows'+'+' or 'windows'+'-'
                         alreadyTrackedPos = true;
-                        int sleeptime = 85;
-                        InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
-                        System.Threading.Thread.Sleep(sleeptime);
                         if (this.handdistance1 == 0)
                             System.Diagnostics.Process.Start("C:\\Windows\\System32\\Magnify.exe");
 
+                        InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
+                        //this line is used to give the system time to recognize the keypress
+                        System.Threading.Thread.Sleep(sleeptime);
                         bool righth_closed = body.HandRightState == HandState.Closed;
                         bool lefth_closed = body.HandLeftState == HandState.Closed;
                         //if both hands are closed zoom in
-                        if(righth_closed && lefth_closed)
+                        if(righth_closed && lefth_closed)//if need be change to this.handdistance < 1.20
                             InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
                         //if right hand is closed move cursor with left hand
                         else if (righth_closed)
@@ -242,17 +192,7 @@ namespace KinectV2MouseControl
                         else if(!righth_closed && !lefth_closed)
                             InputSimulator.SimulateKeyPress(VirtualKeyCode.SUBTRACT);
                         else {/*unknown hand state*/}
-
-                        /*
-                        if (this.handdistance <= 1.15 && ((body.HandRightState == HandState.Closed) || (body.HandLeftState == HandState.Closed)))
-                            InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
-                        else
-                            InputSimulator.SimulateKeyPress(VirtualKeyCode.SUBTRACT);
                         System.Threading.Thread.Sleep(sleeptime);
-                        this.handdistance1 = this.handdistance;
-                        InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
-                        System.Threading.Thread.Sleep(sleeptime);
-                        */
                     }
                     else if (handRight.Z - spineBase.Z < -0.15f) // if right hand lift forward
                         setcursor(rx, ry, body);
@@ -269,9 +209,7 @@ namespace KinectV2MouseControl
                 }
             }
         }
-        /// <summary>
         /// this function is used to set the cursor relative to the left/right hand position towards the screen
-        /// </summary>
         private void setcursor (float x, float y, Body body)
         {
             //killmag();
@@ -300,9 +238,7 @@ namespace KinectV2MouseControl
                 }
             }
         }
-        /// <summary>
         /// this killmag funciton is used to kill the magnify application when not using the magnify application
-        /// </summary>
         private void killmag ()
         {
             try
@@ -313,10 +249,8 @@ namespace KinectV2MouseControl
             }
             catch { } // for catching any exceptions when killing the process "Magnify"
         }
-        /// <summary>
         /// this close function is used to stop the timer
         /// and disconnect from the sensor when the program closes
-        /// </summary>
         public void Close()
         {
             if (timer != null)
