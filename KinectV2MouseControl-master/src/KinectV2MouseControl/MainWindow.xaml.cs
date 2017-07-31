@@ -7,14 +7,15 @@ namespace KinectV2MouseControl
         KinectControl kinectCtrl = new KinectControl();
 
         System.Windows.Forms.Timer refresh_tmr = new System.Windows.Forms.Timer();
-        const int timer_ms = 500; // 500 ms for timer refresh
+        const int timer_ms = 750; // for timer refresh
 
         public MainWindow()
         {
             InitializeComponent();
             refresh_tmr.Tick += new System.EventHandler(refresh_lbls);
-            refresh_tmr.Interval = (1) * (timer_ms); // refresh every 1/2 second
+            refresh_tmr.Interval = (1) * (timer_ms);
             refresh_tmr.Start();
+            //Hide();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -66,7 +67,7 @@ namespace KinectV2MouseControl
                 txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
             }
         }
-
+        //resets the values in the settings tab to the default values set in the program
         private void btn_Default_Click(object sender, RoutedEventArgs e)
         {
             MouseSensitivity.Value = KinectControl.MOUSE_SENSITIVITY;
@@ -79,7 +80,7 @@ namespace KinectV2MouseControl
             
             rfsh_lbls();
         }
-        
+        //this button is used to save the settings in the settings tab
         private void btn_Save_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.MouseSensitivity = (float)MouseSensitivity.Value;
@@ -88,7 +89,7 @@ namespace KinectV2MouseControl
             Properties.Settings.Default.CursorSmoothing = (float)CursorSmoothing.Value;
             Properties.Settings.Default.PauseThresold = kinectCtrl.pauseThresold;
             Properties.Settings.Default.GripGesture = kinectCtrl.useGripGesture;
-            Properties.Settings.Default.DoClick = kinectCtrl.doClick;
+            Properties.Settings.Default.DoClick = !kinectCtrl.doClick;
             Properties.Settings.Default.Save();
         }
 
@@ -126,7 +127,10 @@ namespace KinectV2MouseControl
         {
             rdiGripGestureChange();
         }
-
+        /// <summary>
+        /// the following functions below in form of btn_XXn_Click or btn_XXp_click is for the negative "n" or positive "p" change in the value
+        /// </summary>
+        //mouse sensitivity
         private void btn_msn_Click(object sender, RoutedEventArgs e)
         {
             MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)kinectCtrl.mouseSensitivity - (float)0.1;
@@ -142,7 +146,7 @@ namespace KinectV2MouseControl
                 MouseSensitivity.Value = kinectCtrl.mouseSensitivity = (float)5;
             txtMouseSensitivity.Text = kinectCtrl.mouseSensitivity.ToString("f2");
         }
-
+        //time required for pause to click
         private void btn_trn_Click(object sender, RoutedEventArgs e)
         {
             PauseToClickTime.Value = kinectCtrl.timeRequired = (float)kinectCtrl.timeRequired - (float)0.1;
@@ -158,7 +162,7 @@ namespace KinectV2MouseControl
                 PauseToClickTime.Value = kinectCtrl.timeRequired = (float)5;
             txtTimeRequired.Text = kinectCtrl.timeRequired.ToString("f2");
         }
-
+        // pause movement threshold
         private void btn_mtn_Click(object sender, RoutedEventArgs e)
         {
             PauseThresold.Value = kinectCtrl.pauseThresold = (float)kinectCtrl.pauseThresold - (float)1;
@@ -174,7 +178,7 @@ namespace KinectV2MouseControl
                     PauseThresold.Value = kinectCtrl.pauseThresold = (float)160;
                 txtPauseThresold.Text = kinectCtrl.pauseThresold.ToString("f2");
         }
-
+        //cursor smoothing
         private void btn_csn_Click(object sender, RoutedEventArgs e)
         {
             CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)kinectCtrl.cursorSmoothing - (float)0.05;
@@ -190,7 +194,7 @@ namespace KinectV2MouseControl
                 CursorSmoothing.Value = kinectCtrl.cursorSmoothing = (float)1;
             txtCursorSmoothing.Text = kinectCtrl.cursorSmoothing.ToString("f2");
         }
-
+        //this function is used to refresh the labels in the program in the settings tab and the debug tab
         private void refresh_lbls(object sender, System.EventArgs e)
         {
             rfsh_lbls();
@@ -210,17 +214,18 @@ namespace KinectV2MouseControl
             mox_val.Text = kinectCtrl.cursor_x.ToString("f2");
             spx_val.Text = kinectCtrl.spine_x.ToString("f2");
             scx_val.Text = kinectCtrl.screenHeight.ToString("f2");
-            lrx_val.Text = kinectCtrl.left_right_x.ToString("f2");
+            lrx_val.Text = kinectCtrl.right_left_x.ToString("f2");
             riy_val.Text = kinectCtrl.right_y.ToString("f2");
             ley_val.Text = kinectCtrl.left_y.ToString("f2");
             moy_val.Text = kinectCtrl.cursor_y.ToString("f2");
             spy_val.Text = kinectCtrl.spine_y.ToString("f2");
             scy_val.Text = kinectCtrl.screenWidth.ToString("f2");
-            lry_val.Text = kinectCtrl.left_right_y.ToString("f2");
+            lry_val.Text = kinectCtrl.right_left_y.ToString("f2");
             riz_val.Text = kinectCtrl.right_z.ToString("f2");
             lez_val.Text = kinectCtrl.left_z.ToString("f2");
             spz_val.Text = kinectCtrl.spine_z.ToString("f2");
 
+            ha_val.Text = kinectCtrl.handdistance.ToString("f2");
             se_val.Text = kinectCtrl.mouseSensitivity.ToString("f2");
             cs_val.Text = kinectCtrl.cursorSmoothing.ToString("f2");
             kinectCtrl.useGripGesture = rdiGrip.IsChecked.Value;
