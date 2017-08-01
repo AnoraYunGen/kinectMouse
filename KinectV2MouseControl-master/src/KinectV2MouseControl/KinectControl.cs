@@ -49,13 +49,15 @@ namespace KinectV2MouseControl
         public float spine_z = 0.0f;
         public Int32 cursor_x = 0;
         public Int32 cursor_y = 0;
+
+        public string progress = "not tracking";
         // Default values
-        public const float MOUSE_SENSITIVITY = 3.5f;
+        public const float MOUSE_SENSITIVITY = 3.1f;
         public const float TIME_REQUIRED = 2f;
-        public const float PAUSE_THRESOLD = 60f;
+        public const float PAUSE_THRESOLD =70f;
         public const bool DO_CLICK = true;
         public const bool USE_GRIP_GESTURE = true;
-        public const float CURSOR_SMOOTHING = 0.4f;
+        public const float CURSOR_SMOOTHING = 0.95f;
         /// Determine if we have tracked the hand and used it to move the cursor,
         /// If false, meaning the user may not lift their hands, we don't get the last hand position and some actions like pause-to-click won't be executed.
         bool alreadyTrackedPos = false;
@@ -68,7 +70,7 @@ namespace KinectV2MouseControl
         /// If true, user did a right hand Grip gesture
         bool wasRightGrip = false;
         /// sleeptime is used for the keypress event
-        private const int sleeptime = 85;
+        private const int sleeptime = 225;
         /// If true, user did a right hand Grip gesture
         bool wasLRGrip = false;
         /// this kinect control is for setting up the program to connect to the connect
@@ -165,41 +167,82 @@ namespace KinectV2MouseControl
                     this.right_left_x = this.right_x - this.left_x;
                     this.right_left_y = this.right_y + this.left_y;
                     this.handdistance = (float)Math.Sqrt(Math.Pow(this.right_left_x, 2) + Math.Pow(this.right_left_y, 2) + Math.Pow(this.right_left_z, 2));
+
+                    this.progress = "Window update Disabled";
                     //if both hands lift up
                     if ((handRight.Z - spineBase.Z < -0.15f) && (handLeft.Z - spineBase.Z < -0.15f))
                     {
-                        //this portion (if clause) was added to add another guesture
+
+                        /*
+                        this.progress = "dualHands";
+                        //this portion (if clause) was added to add another guesture to the original program
                         //specifically the windows magnification tool using keyboard shortcut 'windows'+'+' or 'windows'+'-'
                         alreadyTrackedPos = true;
                         if (this.handdistance1 == 0)
-                            System.Diagnostics.Process.Start("C:\\Windows\\System32\\Magnify.exe");
-
-                        InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
-                        //this line is used to give the system time to recognize the keypress
-                        System.Threading.Thread.Sleep(sleeptime);
+                        {
+                            this.progress = "check Magnify process";
+                            System.Diagnostics.Process[] processes = System.Diagnostics.Process.GetProcessesByName("Magnify");
+                            if (!(processes.Length > 0))
+                                System.Diagnostics.Process.Start("C:\\Windows\\System32\\Magnify.exe");
+                        }
+                        this.progress = "handchecks";
                         bool righth_closed = body.HandRightState == HandState.Closed;
                         bool lefth_closed = body.HandLeftState == HandState.Closed;
-                        //if both hands are closed zoom in
-                        if(righth_closed && lefth_closed)//if need be change to this.handdistance < 1.20
+
+                        if (righth_closed && lefth_closed)
+                            killmag();
+                        //InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
+                        //this line is used to give the system time to recognize the keypress
+                        //InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
+                        //System.Threading.Thread.Sleep(sleeptime);
+
+                        /*trying to implement*******************************************************
+                        if ((this.handdistance >= 1.05) && (righth_closed && lefth_closed))
+                        {
+                            Console.Write("test");
+                            this.progress = "if2";
                             InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
-                        //if right hand is closed move cursor with left hand
-                        else if (righth_closed)
-                            setcursor(lx, ly, body);
-                        //if left hand is closed move cursor with right hand
-                        else if (lefth_closed)
-                            setcursor(rx, ry, body);
-                        //if both hands open zoom out until out of this loop
-                        else if(!righth_closed && !lefth_closed)
+                            System.Threading.Thread.Sleep(sleeptime);
+                            return;
+
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
+                        }
+
+                        /*
+                        if (this.handdistance <= 1.15 && (righth_closed || lefth_closed))
+                        {
+                            this.progress = "if3";
                             InputSimulator.SimulateKeyPress(VirtualKeyCode.SUBTRACT);
-                        else {/*unknown hand state*/}
-                        System.Threading.Thread.Sleep(sleeptime);
+                            System.Threading.Thread.Sleep(sleeptime);
+                        }
+                        if ((righth_closed && !lefth_closed) || (!righth_closed && lefth_closed))
+                        {
+                            this.progress = "if4";
+                            killmag();
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
+                            System.Threading.Thread.Sleep(sleeptime);
+                        }
+
+                        this.progress = "if done";
+                        this.handdistance1 = this.handdistance;
+                        
+                        /***************************************************************************/
+
+                        //next few lines work but am trying to implement the above
+                        /*currently works***********************************************************/
+                        dualhands(body);
+                        /***************************************************************************/
                     }
-                    else if (handRight.Z - spineBase.Z < -0.15f) // if right hand lift forward
-                        setcursor(rx, ry, body);
+
+                    // if right hand lift forward
+                    else if (handRight.Z - spineBase.Z < -0.15f)
+                        setcursor(rx, ry, body, 1);
+                    // if left hand lift forward
                     else if (handLeft.Z - spineBase.Z < -0.15f)
-                        setcursor(lx, ly, body);
+                        setcursor(lx, ly, body, 2);
                     else
                     {
+                        this.progress = "Not Tracking any hands";
                         wasLeftGrip = true;
                         wasRightGrip = true;
                         alreadyTrackedPos = false;
@@ -209,10 +252,66 @@ namespace KinectV2MouseControl
                 }
             }
         }
-        /// this function is used to set the cursor relative to the left/right hand position towards the screen
-        private void setcursor (float x, float y, Body body)
+        /// dual hands
+        private void dualhands(Body body)
         {
+            this.progress = "dualHands";
+            //this portion (if clause) was added to add another guesture to the original program
+            //specifically the windows magnification tool using keyboard shortcut 'windows'+'+' or 'windows'+'-'
+            alreadyTrackedPos = true;
+            if (this.handdistance1 == 0)
+            {
+                /*
+                this.progress = "check Magnify process";
+                System.Diagnostics.Process[] processes = System.Diagnostics.Process.GetProcessesByName("Magnify");
+                if (!(processes.Length > 0))
+                    System.Diagnostics.Process.Start("C:\\Windows\\System32\\Magnify.exe");
+                    */
+
+                InputSimulator.SimulateModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.ADD);
+            }
+
+            this.progress = "handchecks";
+            bool righth_closed = body.HandRightState == HandState.Closed;
+            bool lefth_closed = body.HandLeftState == HandState.Closed;
+
+            //InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
+            //System.Threading.Thread.Sleep(sleeptime);
+            this.progress = "to magnify or to not magnify";
+            if (righth_closed && lefth_closed)
+                killmag();
+            else if (righth_closed)
+            {
+                InputSimulator.SimulateModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.ADD);
+                /*
+                InputSimulator.SimulateKeyPress(VirtualKeyCode.ADD);
+                System.Threading.Thread.Sleep(sleeptime);
+                InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
+                */
+            }
+            else if (lefth_closed)
+            {
+                InputSimulator.SimulateModifiedKeyStroke(VirtualKeyCode.RWIN, VirtualKeyCode.SUBTRACT);
+                /*
+                InputSimulator.SimulateKeyDown(VirtualKeyCode.LWIN);
+                System.Threading.Thread.Sleep(sleeptime);
+                InputSimulator.SimulateKeyUp(VirtualKeyCode.LWIN);
+                */
+            }
+            this.handdistance1 = this.handdistance;
+            //page or 2 of instructions
+            // widgets voice commands, guestures
+            //open stufff and open and close stuff
+        }
+        /// this function is used to set the cursor relative to the left/right hand position towards the screen
+        private void setcursor (float x, float y, Body body, int hand)
+        {
+            //kills magnify application
             //killmag();
+            if(hand == 1)
+                    this.progress = "setting cursor with right hand";
+            if(hand == 2)
+                this.progress = "setting cursor with left hand";
             Point curPos = MouseControl.GetCursorPosition();
             // smoothing for using should be 0 - 0.95f. The way we smooth the cusor is: oldPos + (newPos - oldPos) * smoothValue
             float smoothing = 1 - cursorSmoothing;
@@ -226,13 +325,16 @@ namespace KinectV2MouseControl
             /// the following is used to click
             if (doClick && useGripGesture)
             {
-                if ((body.HandRightState == HandState.Closed) && !wasLRGrip)
+                if ((body.HandRightState == HandState.Closed || (body.HandLeftState == HandState.Closed)) && !wasLRGrip)
                 {
+                    this.progress = "clicking";
                     MouseControl.MouseLeftDown();
                     wasLRGrip = true;
                 }
-                else if ((body.HandRightState == HandState.Open || body.HandRightState == HandState.Lasso) && wasLRGrip)
+                else if ((body.HandRightState == HandState.Open || body.HandRightState == HandState.Lasso ||
+                          body.HandLeftState == HandState.Open || body.HandLeftState == HandState.Lasso) && wasLRGrip)
                 {
+                    this.progress = "unclicking";
                     MouseControl.MouseLeftUp();
                     wasLRGrip = false;
                 }
@@ -241,13 +343,18 @@ namespace KinectV2MouseControl
         /// this killmag funciton is used to kill the magnify application when not using the magnify application
         private void killmag ()
         {
-            try
-            {
-                System.Diagnostics.Process[] processes = System.Diagnostics.Process.GetProcessesByName("Magnify");
-                foreach (var process in processes)
-                    process.Kill();
-            }
-            catch { } // for catching any exceptions when killing the process "Magnify"
+            this.progress = "killing Magnify.exe";
+            System.Diagnostics.Process[] processes = System.Diagnostics.Process.GetProcessesByName("Magnify");
+            if(processes.Length > 0)
+                foreach (System.Diagnostics.Process p in processes)
+                {
+                    try
+                    {
+                        p.Kill();
+                    }
+                    catch//if cannot kill Magnify
+                    {/*do nothing*/}
+                }
         }
         /// this close function is used to stop the timer
         /// and disconnect from the sensor when the program closes

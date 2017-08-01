@@ -232,6 +232,8 @@ namespace KinectV2MouseControl
             gr_val.Text = kinectCtrl.useGripGesture.ToString();
             kinectCtrl.doClick = chkEnClick.IsChecked.Value;
             cl_val.Text = (kinectCtrl.doClick).ToString();
+
+            Program_Progress.Text = "Program Progress: " + kinectCtrl.progress;
         }
     }
 }

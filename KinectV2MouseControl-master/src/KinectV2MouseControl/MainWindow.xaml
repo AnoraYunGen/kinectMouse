@@ -53,6 +53,8 @@
                         <ColumnDefinition Width="429*"/>
                     </Grid.ColumnDefinitions>
 
+
+
                     <Label x:Name="lbl_Right" Content="Right Hand&#xA;" HorizontalAlignment="Left" Margin="65,5,0,0" VerticalAlignment="Top" Width="79" Height="26" Grid.Column="1"/>
                     <Label x:Name="lblX_val" Content="X Values" HorizontalAlignment="Left" Margin="3,36,0,0" VerticalAlignment="Top" Width="57" Height="29" Grid.Column="1"/>
                     <Label x:Name="lblY_val" Content="Y Values" HorizontalAlignment="Left" Margin="3,70,0,0" VerticalAlignment="Top" Width="57" Height="29" Grid.Column="1"/>
@@ -93,6 +95,7 @@
                     <TextBox x:Name="ha_val" HorizontalAlignment="Left" Height="29" Margin="317,155,0,0" TextWrapping="Wrap" Text="HD Val" VerticalAlignment="Top" Width="79" Grid.Column="1"/>
 
                     <Image x:Name="UAH_blue_png1" Source="UAH_blue.png" Stretch="Fill" Margin="0,244,240,-4" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="Program_Progress" HorizontalAlignment="Left" Height="22" Margin="0,235,0,0" TextWrapping="Wrap" Text="Program Progress" VerticalAlignment="Top" Width="247" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
         </TabControl>
